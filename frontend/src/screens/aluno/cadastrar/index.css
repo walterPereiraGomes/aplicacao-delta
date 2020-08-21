@@ -1,0 +1,17 @@
+.container-cadastro {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+}
+
+.fieldForm {
+    padding: 10px;
+    width: 350px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.margin-top {
+    background: red;
+    margin-top: 20px;
+}

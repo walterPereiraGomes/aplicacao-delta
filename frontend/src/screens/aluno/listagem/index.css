@@ -1,0 +1,19 @@
+.container-listagem {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.table-listagem {
+    width: 60%;
+}
+
+.flex-space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.teste {
+    width: 150px;
+}

@@ -1,0 +1,33 @@
+.container-menu {
+    padding: 0 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    background: #1E80BE;
+}
+.menu-selecao {
+    border: solid 1px white;
+    border-radius: 10px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    width: 250px;
+}
+.one-edge-shadow {
+	-webkit-box-shadow: 0 8px 6px -3px rgb(124, 124, 124);
+	   -moz-box-shadow: 0 8px 6px -3px rgb(124, 124, 124);
+	        box-shadow: 0 8px 6px -3px rgb(124, 124, 124);
+}
+
+.icon-delta {
+    color: white;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.icon-delta:hover {
+    color: white;
+    text-decoration:none;
+    height: 40px;
+}
