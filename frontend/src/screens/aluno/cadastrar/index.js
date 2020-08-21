@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
 import './index.css';
 import { InputGroup, FormControl, Button, Card } from 'react-bootstrap';
 import Image from 'react-bootstrap/Image';
@@ -6,9 +7,29 @@ import { useHistory } from "react-router-dom";
 import ImageUploader from 'react-images-upload';
 
 const Aluno = () => {
+
+  // const [id, setId] = useState(null);
+  const { id } = useParams();
   const [foto, setFoto] = useState([]);
   const [nome, setNome] = useState('');
   const [endereco, setEndereco] = useState('');
+
+  useEffect(()=>{
+    if (id) {
+      const alunoTeste = {
+        id: 0,
+        nome: 'juninho',
+        endereco: 'rua 1',
+        foto: 'caminhoFoto'
+      }
+  
+      if (alunoTeste !== null) {
+        // setFoto(alunoTeste.foto);
+        setNome(alunoTeste.nome);
+        setEndereco(alunoTeste.endereco);
+      }
+    }
+  },[id]);
 
   function onDrop(picture) {
     setFoto(null);
@@ -17,6 +38,7 @@ const Aluno = () => {
 
   const history = useHistory();
   function cadastrar() {
+    console.log(id);
     history.push("/listagem");
   }
 
