@@ -7,8 +7,6 @@
 .fieldForm {
     padding: 10px;
     width: 350px;
-    display: flex;
-    justify-content: space-between;
 }
 
 .margin-top {

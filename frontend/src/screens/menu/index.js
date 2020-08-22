@@ -10,7 +10,7 @@ const Menu = () => {
     history.push("/listagem");
   }
   return (
-    <div className="container-menu one-edge-shadow">
+    <div className="container-menu one-edge-shadow flex">
       <a className="icon-delta" href="/">Grupo Delta</a>
       <Button variant="light" onClick={goToPortal}>Portal do Aluno</Button>
     </div>

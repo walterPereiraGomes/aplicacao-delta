@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const api = axios.create({
-  baseURL: 'http://walter.tplinkdns.com/api/',
+  baseURL: 'http://localhost:8080/api/',
 });
 
 function configureToast() {
@@ -27,6 +27,26 @@ export async function getAlunos() {
   return result.data;
 }
 
+export async function getAluno(id) {
+
+  configureToast();
+
+  const result = await api({
+    url: `aluno/${id}`,
+    method: 'GET',
+  }).catch((e) => {
+    toast.error(e.message);
+  });
+
+  return result.data;
+}
+
+export const uploadFoto = (foto, idAluno) => {
+  return axios.post(`/foto/upload/${idAluno}`, foto, {
+    headers: { Authorization: "Bearer "},
+  });
+};
+
 export async function deleteAluno(id) {
 
   configureToast();
@@ -41,7 +61,7 @@ export async function deleteAluno(id) {
   });
 }
 
-export async function cadastraAluno(aluno) {
+export async function saveAluno(aluno) {
 
   configureToast();
 
@@ -50,7 +70,7 @@ export async function cadastraAluno(aluno) {
     method: 'POST',
     data: aluno,
   }).then(() => {
-    toast.success('Aluno cadastrado com sucesso');
+    toast.success('Aluno salvo com sucesso');
   }).catch((e) => {
     toast.error(e.message);
   });

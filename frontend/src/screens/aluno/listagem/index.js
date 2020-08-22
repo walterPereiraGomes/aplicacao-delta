@@ -1,28 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Table, Button } from 'react-bootstrap';
+import { Table, DropdownButton, Button, Dropdown, ButtonGroup, Modal } from 'react-bootstrap';
 import { getAlunos, deleteAluno } from '../../../services/api';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { Create, DeleteOutline, Visibility } from '@material-ui/icons';
 
 function Listagem() {
-  
+
   const history = useHistory();
+  const [alunos, setAlunos] = useState([]);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  useEffect(()=>{
+      findAlunos();
+  },[]);
+
   function goToCadastro() {
     history.push("/cadastro");
   }
   
-  function excluirAluno () {
+  async function excluirAluno (idAluno) {
     confirmAlert({
       title: 'Exclusão de Aluno',
       message: 'Tem certeza que deseja excluir esse aluno?',
       buttons: [
         {
           label: 'Sim',
-          onClick: () => {
-            deleteAluno();
+          onClick: async () => {
+            await deleteAluno(idAluno);
+            findAlunos();
           }
         },
         {
@@ -34,62 +46,78 @@ function Listagem() {
   };
 
   function findAlunos() {
-    const alunos = getAlunos();
-    console.log(alunos);
+    getAlunos().then((a) => {
+      setAlunos(a)
+    })
+  }
+
+  function visualizarFoto(idAluno){
+    handleShow();
+    console.log(idAluno);
   }
 
   function editar(idAluno) {
     history.push(`/editar/${idAluno}`);
   }
-
-  const alunos = [
-    {
-      id: 0,
-      nome: "Walter",
-      endereco: "Rua 1",
-      foto: "abc"
-    },
-    {
-      id: 1,
-      nome: "Matheus",
-      endereco: "Rua 2",
-      foto: "abc"
-    }
-  ]
   
   return (
     <div className="container-listagem">
-      <Button className="margin-bottom" variant="secondary" type="button" onClick={findAlunos}>
-        alunos
-      </Button>
-      <Button className="margin-bottom" variant="secondary" type="button" onClick={goToCadastro}>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Visualização do aluno</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <span>aki vai fica a foto</span>
+        </Modal.Body>
+      </Modal>
+      <Button className="margin-bottom" type="button" onClick={goToCadastro}>
         Cadastrar novo Aluno
       </Button>
       <div className="table-listagem">
         <Table striped bordered hover size="sm">
           <thead>
             <tr>
-              <th>Foto</th>
+              <th className="sizeColButton">Foto</th>
               <th>Nome</th>
               <th>Endereço</th>
-              <th className="teste">Ações</th>
+              <th className="sizeColButton">Ações</th>
             </tr>
           </thead>
           <tbody>
             { alunos.length > 0
               ? alunos.map(aluno => {
                 return (
-                  <tr>
-                    <td>{aluno.foto}</td>
+                  <tr key={aluno.id}>
+                    <td>
+                      <span className="flex-center">
+                        <Button  size="sm" onClick={() => {visualizarFoto(aluno.id)}}>
+                          <Visibility></Visibility>
+                        </Button>
+                      </span>
+                    </td>
                     <td>{aluno.nome}</td>
                     <td>{aluno.endereco}</td>
-                    <td className="flex-space-between">
-                      <Button size="sm" onClick={() => {editar(aluno.id)}}>Editar</Button>
-                      <Button variant="danger" size="sm" onClick={excluirAluno}>Excluir</Button>
+                    <td className="flex-center">
+                      <DropdownButton size="sm" as={ButtonGroup} title="Ações" id="bg-nested-dropdown">
+                        <Dropdown.Item eventKey="1" onClick={() => {editar(aluno.id)}}>
+                          <span>
+                            <Create></Create>
+                            <span>Editar</span>
+                          </span>
+                        </Dropdown.Item>
+                        <Dropdown.Item eventKey="2" onClick={() => {excluirAluno(aluno.id)}}>
+                          <span>
+                            <DeleteOutline></DeleteOutline>
+                            <span>Excluir</span>
+                          </span>
+                        </Dropdown.Item>
+                      </DropdownButton>
                     </td>
                   </tr>
                 )
-              }) : <div></div>
+              }) : <tr>
+                <td colSpan="4"><span className="center">Não foi cadastrado nenhum aluno</span></td>
+              </tr>
             }
           </tbody>
         </Table>

@@ -2,44 +2,57 @@ import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import './index.css';
 import { InputGroup, FormControl, Button, Card } from 'react-bootstrap';
+import { getAluno, uploadFoto, saveAluno } from '../../../services/api';
 import Image from 'react-bootstrap/Image';
 import { useHistory } from "react-router-dom";
-import ImageUploader from 'react-images-upload';
+// import ImageUploader from 'react-images-upload';
 
 const Aluno = () => {
 
-  // const [id, setId] = useState(null);
-  const { id } = useParams();
+  const { idAluno } = useParams();
+  const [id, setId] = useState(null);
   const [foto, setFoto] = useState([]);
   const [nome, setNome] = useState('');
   const [endereco, setEndereco] = useState('');
 
   useEffect(()=>{
-    if (id) {
-      const alunoTeste = {
-        id: 0,
-        nome: 'juninho',
-        endereco: 'rua 1',
-        foto: 'caminhoFoto'
-      }
-  
-      if (alunoTeste !== null) {
-        // setFoto(alunoTeste.foto);
-        setNome(alunoTeste.nome);
-        setEndereco(alunoTeste.endereco);
-      }
+    if (idAluno) {
+      getAluno(idAluno).then((aluno) => {
+        setId(aluno.id);
+        setNome(aluno.nome);
+        setEndereco(aluno.endereco);
+      });
     }
-  },[id]);
+  },[idAluno]);
 
-  function onDrop(picture) {
-    setFoto(null);
-    setFoto(picture);
-  }
+  // function onDrop(picture) {
+  //   setFoto(null);
+  //   setFoto(picture);
+  // }
+
+  const uploadFotoMethod = (part) => {
+    const formData = new FormData();
+    formData.append("foto", part);
+    uploadFoto(formData, id).then((response) => {
+      setFoto(response.data);
+    });
+  };
+
+  // function disabledCadastro() {
+  //   return nome === '' || endereco === '';
+  // }
 
   const history = useHistory();
-  function cadastrar() {
-    console.log(id);
-    history.push("/listagem");
+  async function cadastrar() {
+    const AlunoPersistencia = {
+      id: id,
+      nome: nome,
+      endereco: endereco,
+      foto: "foto"
+    }
+    saveAluno(AlunoPersistencia).then(() => {
+      history.push("/listagem");
+    })
   }
 
   return (
@@ -72,13 +85,12 @@ const Aluno = () => {
             </InputGroup>
           </div>
           <div className="fieldForm">
-            <ImageUploader
-              withIcon={true}
-              withPreview={true}
-              buttonText='Selecione a imagem'
-              onChange={onDrop}
-              imgExtension={['.jpg', '.gif', '.png', '.gif']}
-              maxFileSize={5242880}
+            <input
+              id="file"
+              name="foto"
+              type="file"
+              onChange={(e) => uploadFotoMethod(e.target.files[0])}
+              className="form-control"
             />
           </div>
           <div className="container-foto">

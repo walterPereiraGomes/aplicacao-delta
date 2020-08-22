@@ -9,15 +9,25 @@
     width: 60%;
 }
 
-.flex-space-between {
+.flex-center {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 }
 
-.teste {
-    width: 150px;
+.btn-primary {
+    background-color: #5399D2!important;
+    border-color: #5399D2!important;
+}
+
+.sizeColButton {
+    width: 120px;
 }
 
 .margin-bottom {
     margin-bottom: 20px;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
 }
