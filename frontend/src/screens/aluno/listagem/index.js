@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from "react-router-dom";
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Table, DropdownButton, Button, Dropdown, ButtonGroup, Modal } from 'react-bootstrap';
+import { Table, DropdownButton, Button, Dropdown, ButtonGroup, Modal, InputGroup, FormControl } from 'react-bootstrap';
 import { getAlunos, deleteAluno } from '../../../services/api';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
@@ -11,14 +11,16 @@ import { Create, DeleteOutline, Visibility } from '@material-ui/icons';
 function Listagem() {
 
   const history = useHistory();
+  const [campoPesquisa, setCampoPesquisa] = useState('');
   const [alunos, setAlunos] = useState([]);
   const [show, setShow] = useState(false);
+  const [fotoUsuario, setFotoUsuario] = useState('');
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   useEffect(()=>{
-      findAlunos();
+    findAlunos();
   },[]);
 
   function goToCadastro() {
@@ -46,14 +48,14 @@ function Listagem() {
   };
 
   function findAlunos() {
-    getAlunos().then((a) => {
-      setAlunos(a)
+    getAlunos(campoPesquisa).then((alunos) => {
+      setAlunos(alunos)
     })
   }
 
-  function visualizarFoto(idAluno){
+  async function visualizarFoto(foto){
+    await setFotoUsuario(foto);
     handleShow();
-    console.log(idAluno);
   }
 
   function editar(idAluno) {
@@ -66,13 +68,28 @@ function Listagem() {
         <Modal.Header closeButton>
           <Modal.Title>Visualização do aluno</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <span>aki vai fica a foto</span>
+        <Modal.Body className="center">
+          <img className="width-foto" src={`http://localhost:8080/api/documento/download/${fotoUsuario}`} alt="fotoAluno"></img>
         </Modal.Body>
       </Modal>
-      <Button className="margin-bottom" type="button" onClick={goToCadastro}>
-        Cadastrar novo Aluno
-      </Button>
+      <div className="header">
+        <Button className="margin-bottom" type="button" onClick={goToCadastro}>
+          Cadastrar novo Aluno
+        </Button>
+        <div className="search">
+          <InputGroup className="mb-3">
+            <FormControl
+              placeholder="Pesquise pelo nome"
+              aria-describedby="basic-addon2"
+              value={campoPesquisa}
+              onChange={event => {setCampoPesquisa(event.target.value)}}
+              />
+            <InputGroup.Append>
+              <Button onClick={findAlunos}>Pesquisar</Button>
+            </InputGroup.Append>
+          </InputGroup>
+        </div>
+      </div>
       <div className="table-listagem">
         <Table striped bordered hover size="sm">
           <thead>
@@ -90,7 +107,7 @@ function Listagem() {
                   <tr key={aluno.id}>
                     <td>
                       <span className="flex-center">
-                        <Button  size="sm" onClick={() => {visualizarFoto(aluno.id)}}>
+                        <Button type="button" size="sm" variant="outline-secondary" onClick={() => {visualizarFoto(aluno.foto)}}>
                           <Visibility></Visibility>
                         </Button>
                       </span>
@@ -116,7 +133,7 @@ function Listagem() {
                   </tr>
                 )
               }) : <tr>
-                <td colSpan="4"><span className="center">Não foi cadastrado nenhum aluno</span></td>
+                <td colSpan="4"><span className="center">Nenhum aluno encontrado</span></td>
               </tr>
             }
           </tbody>

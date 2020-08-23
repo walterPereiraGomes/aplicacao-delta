@@ -3,56 +3,46 @@ import React, { useState, useEffect } from 'react';
 import './index.css';
 import { InputGroup, FormControl, Button, Card } from 'react-bootstrap';
 import { getAluno, uploadFoto, saveAluno } from '../../../services/api';
-import Image from 'react-bootstrap/Image';
 import { useHistory } from "react-router-dom";
-// import ImageUploader from 'react-images-upload';
+import ImageUploader from 'react-images-upload';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Aluno = () => {
 
+  toast.configure({
+    autoClose: 5000,
+    draggable: false,
+  });
+
   const { idAluno } = useParams();
-  const [id, setId] = useState(null);
-  const [foto, setFoto] = useState([]);
-  const [nome, setNome] = useState('');
-  const [endereco, setEndereco] = useState('');
+  const [aluno, setAluno] = useState({});
 
   useEffect(()=>{
     if (idAluno) {
       getAluno(idAluno).then((aluno) => {
-        setId(aluno.id);
-        setNome(aluno.nome);
-        setEndereco(aluno.endereco);
+        setAluno(aluno);
       });
     }
   },[idAluno]);
 
-  // function onDrop(picture) {
-  //   setFoto(null);
-  //   setFoto(picture);
-  // }
-
-  const uploadFotoMethod = (part) => {
+  const uploadFotoMethod = (part, jogaFora) => {
     const formData = new FormData();
-    formData.append("foto", part);
-    uploadFoto(formData, id).then((response) => {
-      setFoto(response.data);
+    formData.append("file", part[0]);
+    uploadFoto(formData).then((response) => {
+      setAluno({...aluno, foto: response.data})
     });
   };
 
-  // function disabledCadastro() {
-  //   return nome === '' || endereco === '';
-  // }
-
   const history = useHistory();
   async function cadastrar() {
-    const AlunoPersistencia = {
-      id: id,
-      nome: nome,
-      endereco: endereco,
-      foto: "foto"
+    if (!!aluno.nome && !!aluno.endereco && !!aluno.foto) {
+      saveAluno(aluno).then(() => {
+        history.push("/listagem");
+      })
+    } else {
+      toast.warning("Preencha todos os campos.");
     }
-    saveAluno(AlunoPersistencia).then(() => {
-      history.push("/listagem");
-    })
   }
 
   return (
@@ -67,8 +57,8 @@ const Aluno = () => {
             </InputGroup.Prepend>
             <FormControl
               placeholder="Digite o nome"
-              value={nome}
-              onChange={event => {setNome(event.target.value)}}
+              value={aluno.nome}
+              onChange={event => {setAluno({...aluno, nome: event.target.value})}}
             />
           </InputGroup>
           </div>
@@ -79,22 +69,24 @@ const Aluno = () => {
               </InputGroup.Prepend>
               <FormControl
                 placeholder="Digite o endereço"
-                value={endereco}
-                onChange={event => {setEndereco(event.target.value)}}
+                value={aluno.endereco}
+                onChange={event => {setAluno({ ...aluno, endereco: event.target.value })}}
               />
             </InputGroup>
           </div>
           <div className="fieldForm">
-            <input
-              id="file"
-              name="foto"
-              type="file"
-              onChange={(e) => uploadFotoMethod(e.target.files[0])}
-              className="form-control"
+            <ImageUploader
+              withIcon={true}
+              buttonText='Selecione a imagem'
+              onChange={uploadFotoMethod}
+              imgExtension={['.jpg']}
+              maxFileSize={5242880}
+              withPreview={true}
+              label='tipos aceitaveis: JPG'
+              singleImage={true}
             />
           </div>
           <div className="container-foto">
-            <Image src={foto} fluid />
           </div>
           </Card.Body>
       </Card>

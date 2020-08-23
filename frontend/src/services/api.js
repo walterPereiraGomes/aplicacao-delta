@@ -13,13 +13,14 @@ function configureToast() {
   });
 }
 
-export async function getAlunos() {
+export async function getAlunos(nome) {
 
   configureToast();
 
   const result = await api({
-    url: 'aluno/all',
-    method: 'GET',
+    url: 'aluno/find',
+    method: 'POST',
+    data: { nome },
   }).catch((e) => {
     toast.error(e.message);
   });
@@ -41,10 +42,12 @@ export async function getAluno(id) {
   return result.data;
 }
 
-export const uploadFoto = (foto, idAluno) => {
-  return axios.post(`/foto/upload/${idAluno}`, foto, {
-    headers: { Authorization: "Bearer "},
-  });
+export function uploadFoto(foto) {
+  return api({
+    url: '/documento/upload',
+    data: foto,
+    method: 'POST'
+  })
 };
 
 export async function deleteAluno(id) {
