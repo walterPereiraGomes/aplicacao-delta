@@ -2,6 +2,7 @@ package com.backend.delta.controllers;
 
 import com.backend.delta.model.Aluno;
 import com.backend.delta.service.AlunoService;
+import com.backend.delta.utils.FiltroAluno;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +18,9 @@ public class AlunoController {
         this.alunoService = alunoService;
     }
 
-    @GetMapping(path = "/all")
-    public List<Aluno> alunos() {
-        return alunoService.getAlunos();
+    @PostMapping(path = "find", produces = "application/json")
+    public List<Aluno> alunos(@RequestBody FiltroAluno filtroAluno) {
+        return alunoService.findAlunos(filtroAluno.nome);
     }
 
     @GetMapping(path = "/{id}")

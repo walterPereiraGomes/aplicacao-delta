@@ -18,8 +18,8 @@ public class AlunoService {
         this.alunoRepository = alunoRepository;
     }
 
-    public List<Aluno> getAlunos() {
-        return alunoRepository.findAll();
+    public List<Aluno> findAlunos(String nome) {
+        return nome == "" ? alunoRepository.findAll() : alunoRepository.findByNomeIgnoreCaseContaining(nome);
     }
 
     public Aluno getById(Integer id) {
@@ -31,6 +31,9 @@ public class AlunoService {
     }
 
     public void saveAluno(Aluno aluno) {
+        /*
+            caso houver id o save se trata de um update, caso contrario é um cadastro
+        */
         if (aluno.getId() != null) {
             Aluno alunoSalvo = alunoRepository.findById(aluno.getId()).get();
             alunoSalvo.setEndereco(aluno.getEndereco());
