@@ -53,7 +53,9 @@ const Aluno = () => {
           <div className="fieldForm">
           <InputGroup className="mb-3">
             <InputGroup.Prepend>
-              <InputGroup.Text id="basic-addon1">Nome:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</InputGroup.Text>
+              <InputGroup.Text id="basic-addon1">
+                Nome:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              </InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
               placeholder="Digite o nome"
@@ -65,7 +67,9 @@ const Aluno = () => {
           <div className="fieldForm">
             <InputGroup className="mb-3">
               <InputGroup.Prepend>
-                <InputGroup.Text id="basic-addon1">Endereço:</InputGroup.Text>
+                <InputGroup.Text id="basic-addon1">
+                  Endereço:
+                </InputGroup.Text>
               </InputGroup.Prepend>
               <FormControl
                 placeholder="Digite o endereço"
@@ -81,16 +85,19 @@ const Aluno = () => {
               onChange={uploadFotoMethod}
               imgExtension={['.jpg']}
               maxFileSize={5242880}
-              withPreview={true}
               label='tipos aceitaveis: JPG'
               singleImage={true}
             />
           </div>
-          <div className="container-foto">
-          </div>
+          {
+            aluno.foto ?
+              (<img className="width-foto" src={`http://localhost:8080/api/documento/download/${aluno.foto}`} alt="fotoAluno"></img>) : null
+          }
           </Card.Body>
       </Card>
-      <Button className="margin-top" variant="secondary" onClick={cadastrar}>Cadastrar</Button>
+      <Button className="margin-top" variant="secondary" onClick={cadastrar}>
+        Finalizar
+      </Button>
     </div>
   )
 }

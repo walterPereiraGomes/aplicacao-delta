@@ -21,7 +21,7 @@ function Listagem() {
 
   useEffect(()=>{
     findAlunos();
-  },[]);
+  }, []);
 
   function goToCadastro() {
     history.push("/cadastro");
@@ -53,8 +53,8 @@ function Listagem() {
     })
   }
 
-  async function visualizarFoto(foto){
-    await setFotoUsuario(foto);
+  function visualizarFoto(foto){
+    setFotoUsuario(foto);
     handleShow();
   }
 
@@ -66,7 +66,7 @@ function Listagem() {
     <div className="container-listagem">
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Visualização do aluno</Modal.Title>
+          <Modal.Title><span>Visualização do aluno</span></Modal.Title>
         </Modal.Header>
         <Modal.Body className="center">
           <img className="width-foto" src={`http://localhost:8080/api/documento/download/${fotoUsuario}`} alt="fotoAluno"></img>
@@ -117,15 +117,15 @@ function Listagem() {
                     <td className="flex-center">
                       <DropdownButton size="sm" as={ButtonGroup} title="Ações" id="bg-nested-dropdown">
                         <Dropdown.Item eventKey="1" onClick={() => {editar(aluno.id)}}>
-                          <span>
+                          <span className="item-dropdown">
                             <Create></Create>
-                            <span>Editar</span>
+                            <span className="opcao-dropdown">Editar</span>
                           </span>
                         </Dropdown.Item>
                         <Dropdown.Item eventKey="2" onClick={() => {excluirAluno(aluno.id)}}>
-                          <span>
+                          <span className="item-dropdown">
                             <DeleteOutline></DeleteOutline>
-                            <span>Excluir</span>
+                            <span className="opcao-dropdown">Excluir</span>
                           </span>
                         </Dropdown.Item>
                       </DropdownButton>
