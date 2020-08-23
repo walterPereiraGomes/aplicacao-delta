@@ -91,7 +91,7 @@ const Aluno = () => {
           </div>
           {
             aluno.foto ?
-              (<img className="width-foto" src={`http://localhost:8080/api/documento/download/${aluno.foto}`} alt="fotoAluno"></img>) : null
+              (<img className="width-foto" src={`http://walter.tplinkdns.com:8080/api/documento/download/${aluno.foto}`} alt="fotoAluno"></img>) : null
           }
           </Card.Body>
       </Card>

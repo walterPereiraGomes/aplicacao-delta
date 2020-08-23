@@ -21,7 +21,7 @@ function Listagem() {
 
   useEffect(()=>{
     findAlunos();
-  }, []);
+  }, []); // eslint-disable-line
 
   function goToCadastro() {
     history.push("/cadastro");
@@ -48,9 +48,7 @@ function Listagem() {
   };
 
   function findAlunos() {
-    getAlunos(campoPesquisa).then((alunos) => {
-      setAlunos(alunos)
-    })
+    getAlunos(campoPesquisa).then(alunos => setAlunos(alunos));
   }
 
   function visualizarFoto(foto){
