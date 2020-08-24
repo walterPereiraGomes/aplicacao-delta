@@ -67,7 +67,7 @@ function Listagem() {
           <Modal.Title><span>Visualização do aluno</span></Modal.Title>
         </Modal.Header>
         <Modal.Body className="center">
-          <img className="width-foto" src={`http://localhost:8080/api/documento/download/${fotoUsuario}`} alt="fotoAluno"></img>
+          <img className="width-foto" src={`http://walter.tplinkdns.com/api/documento/download/${fotoUsuario}`} alt="fotoAluno"></img>
         </Modal.Body>
       </Modal>
       <div className="header">

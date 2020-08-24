@@ -16,7 +16,7 @@ const Aluno = () => {
   });
 
   const { idAluno } = useParams();
-  const [aluno, setAluno] = useState({});
+  const [aluno, setAluno] = useState({id: null, nome: '', endereco: '', foto: ''});
 
   useEffect(()=>{
     if (idAluno) {
@@ -85,7 +85,7 @@ const Aluno = () => {
               onChange={uploadFotoMethod}
               imgExtension={['.jpg']}
               maxFileSize={5242880}
-              label='tipos aceitaveis: JPG'
+              label='tipos aceitaveis: JPG | Tamanho maximo: 5mb'
               singleImage={true}
             />
           </div>
